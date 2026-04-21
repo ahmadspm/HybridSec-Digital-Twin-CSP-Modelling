@@ -9,6 +9,10 @@ Holmes, D., Mohsin, A., Nepal, S., Sikos, L., Sarker, I. H., & Janicke, H. (2026
 
 This repository provides the reproducibility package, source code, datasets, scripts, and experimental artifacts for the paper:
 
+## Project Description
+
+HySecTwin is a knowledge-driven cybersecurity framework that integrates Digital Twin technology with semantic modelling and hybrid reasoning to improve the security of Cyber-Physical Systems (CPS). The framework combines real-time device synchronization, SAREF-aligned knowledge graphs, deterministic rules, and fuzzy inference to detect anomalous behavior, unauthorized control actions, and logical–physical inconsistencies. Designed for mission-critical environments, HySecTwin enables explainable, low-latency, and reproducible cybersecurity monitoring for smart industrial and IoT systems.
+
 **HySecTwin: A Knowledge-Driven Digital Twin Framework Augmented with Hybrid Reasoning for Cyber-Physical Systems**
 
 HySecTwin integrates:
