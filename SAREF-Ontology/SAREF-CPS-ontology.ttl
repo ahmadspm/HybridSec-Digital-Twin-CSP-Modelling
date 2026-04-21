@@ -1,0 +1,258 @@
+@prefix : <http://example.org/hysectwin#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix saref: <https://saref.etsi.org/core/> .
+
+#################################################################
+# Ontology
+#################################################################
+
+:HySecTwinOntology rdf:type owl:Ontology ;
+    rdfs:label "HySecTwin CPS Digital Twin Ontology" ;
+    rdfs:comment "SAREF-aligned ontology for CPS digital twin modelling and hybrid reasoning." .
+
+#################################################################
+# Classes
+#################################################################
+
+:LightingDevice rdf:type owl:Class ;
+    rdfs:subClassOf saref:Device ;
+    rdfs:label "Lighting Device" .
+
+:Sensor rdf:type owl:Class ;
+    rdfs:subClassOf saref:Device ;
+    rdfs:label "Sensor" .
+
+:Actuator rdf:type owl:Class ;
+    rdfs:subClassOf saref:Device ;
+    rdfs:label "Actuator" .
+
+:HVAC rdf:type owl:Class ;
+    rdfs:subClassOf saref:Device ;
+    rdfs:label "HVAC Device" .
+
+:State rdf:type owl:Class ;
+    rdfs:label "State" .
+
+:Command rdf:type owl:Class ;
+    rdfs:label "Command" .
+
+:Measurement rdf:type owl:Class ;
+    rdfs:label "Measurement" .
+
+:Profile rdf:type owl:Class ;
+    rdfs:label "Profile" .
+
+:Task rdf:type owl:Class ;
+    rdfs:label "Task" .
+
+:Service rdf:type owl:Class ;
+    rdfs:label "Service" .
+
+:OnOffFunction rdf:type owl:Class ;
+    rdfs:subClassOf saref:Function ;
+    rdfs:label "On/Off Function" .
+
+:UnitOfMeasure rdf:type owl:Class ;
+    rdfs:subClassOf saref:UnitOfMeasure ;
+    rdfs:label "Unit of Measure" .
+
+#################################################################
+# Object Properties
+#################################################################
+
+:hasSensor rdf:type owl:ObjectProperty ;
+    rdfs:domain saref:Device ;
+    rdfs:range :Sensor ;
+    rdfs:label "has sensor" .
+
+:hasActuator rdf:type owl:ObjectProperty ;
+    rdfs:domain saref:Device ;
+    rdfs:range :Actuator ;
+    rdfs:label "has actuator" .
+
+:hasState rdf:type owl:ObjectProperty ;
+    rdfs:domain saref:Device ;
+    rdfs:range :State ;
+    rdfs:label "has state" .
+
+:hasCommand rdf:type owl:ObjectProperty ;
+    rdfs:domain saref:Device ;
+    rdfs:range :Command ;
+    rdfs:label "has command" .
+
+:hasMeasurement rdf:type owl:ObjectProperty ;
+    rdfs:domain saref:Device ;
+    rdfs:range :Measurement ;
+    rdfs:label "has measurement" .
+
+:hasTask rdf:type owl:ObjectProperty ;
+    rdfs:domain saref:Device ;
+    rdfs:range :Task ;
+    rdfs:label "has task" .
+
+:hasProfile rdf:type owl:ObjectProperty ;
+    rdfs:domain saref:Device ;
+    rdfs:range :Profile ;
+    rdfs:label "has profile" .
+
+:hasService rdf:type owl:ObjectProperty ;
+    rdfs:domain saref:Device ;
+    rdfs:range :Service ;
+    rdfs:label "has service" .
+
+:hasFunction rdf:type owl:ObjectProperty ;
+    rdfs:domain saref:Device ;
+    rdfs:range saref:Function ;
+    rdfs:label "has function" .
+
+:measuresProperty rdf:type owl:ObjectProperty ;
+    rdfs:domain :Sensor ;
+    rdfs:range saref:Property ;
+    rdfs:label "measures property" .
+
+:controlsProperty rdf:type owl:ObjectProperty ;
+    rdfs:domain :Actuator ;
+    rdfs:range saref:Property ;
+    rdfs:label "controls property" .
+
+:relatesToDevice rdf:type owl:ObjectProperty ;
+    rdfs:domain :Measurement ;
+    rdfs:range saref:Device ;
+    rdfs:label "relates to device" .
+
+#################################################################
+# Datatype Properties
+#################################################################
+
+:uniqueId rdf:type owl:DatatypeProperty ;
+    rdfs:domain saref:Device ;
+    rdfs:range xsd:string ;
+    rdfs:label "unique id" .
+
+:lastSeen rdf:type owl:DatatypeProperty ;
+    rdfs:domain saref:Device ;
+    rdfs:range xsd:dateTime ;
+    rdfs:label "last seen" .
+
+:etag rdf:type owl:DatatypeProperty ;
+    rdfs:domain saref:Device ;
+    rdfs:range xsd:string ;
+    rdfs:label "etag" .
+
+:manufacturerName rdf:type owl:DatatypeProperty ;
+    rdfs:domain saref:Device ;
+    rdfs:range xsd:string ;
+    rdfs:label "manufacturer name" .
+
+:deviceType rdf:type owl:DatatypeProperty ;
+    rdfs:domain saref:Device ;
+    rdfs:range xsd:string ;
+    rdfs:label "type" .
+
+:reachable rdf:type owl:DatatypeProperty ;
+    rdfs:domain saref:Device ;
+    rdfs:range xsd:boolean ;
+    rdfs:label "reachable" .
+
+:on rdf:type owl:DatatypeProperty ;
+    rdfs:domain :State ;
+    rdfs:range xsd:boolean ;
+    rdfs:label "on" .
+
+:alert rdf:type owl:DatatypeProperty ;
+    rdfs:domain :State ;
+    rdfs:range xsd:string ;
+    rdfs:label "alert" .
+
+:colorMode rdf:type owl:DatatypeProperty ;
+    rdfs:domain :State ;
+    rdfs:range xsd:string ;
+    rdfs:label "color mode" .
+
+:ct rdf:type owl:DatatypeProperty ;
+    rdfs:domain :State ;
+    rdfs:range xsd:integer ;
+    rdfs:label "color temperature" .
+
+:ctmax rdf:type owl:DatatypeProperty ;
+    rdfs:domain saref:Device ;
+    rdfs:range xsd:integer ;
+    rdfs:label "ct max" .
+
+:colorCapabilities rdf:type owl:DatatypeProperty ;
+    rdfs:domain saref:Device ;
+    rdfs:range xsd:integer ;
+    rdfs:label "color capabilities" .
+
+#################################################################
+# Individuals matching the figure style
+#################################################################
+
+:Device rdf:type :LightingDevice ;
+    :uniqueId "04:cd:15:ff:fe:c8:aa:6e-01" ;
+    :lastSeen "2023-03-26T08:26:00Z"^^xsd:dateTime ;
+    :etag "0f1f511fe2958521437c262940734eb0" ;
+    :manufacturerName "IKEA of Sweden" ;
+    :deviceType "Color temperature light" ;
+    :ctmax 454 ;
+    :colorCapabilities 16 ;
+    :reachable true ;
+    :hasSensor :Sensor ;
+    :hasActuator :Actuator ;
+    :hasState :State1 ;
+    :hasCommand :Command1 ;
+    :hasMeasurement :Measurement1 ;
+    :hasTask :Task1 ;
+    :hasProfile :Profile1 ;
+    :hasService :Service1 ;
+    :hasFunction :OnOffFunction1 .
+
+:Sensor rdf:type :Sensor ;
+    rdfs:label "Sensor" .
+
+:Actuator rdf:type :Actuator ;
+    rdfs:label "Actuator" .
+
+:State1 rdf:type :State ;
+    :on true ;
+    :alert "none" ;
+    :colorMode "ct" ;
+    :ct 250 .
+
+:Command1 rdf:type :Command ;
+    rdfs:label "Lighting command" .
+
+:Measurement1 rdf:type :Measurement ;
+    rdfs:label "Device measurement" ;
+    :relatesToDevice :Device .
+
+:Task1 rdf:type :Task ;
+    rdfs:label "Lighting control task" .
+
+:Profile1 rdf:type :Profile ;
+    rdfs:label "Lighting device profile" .
+
+:Service1 rdf:type :Service ;
+    rdfs:label "Lighting service" .
+
+:OnOffFunction1 rdf:type :OnOffFunction ;
+    rdfs:label "On/Off Function Instance" .
+
+#################################################################
+# Optional numbered instances seen in the image
+#################################################################
+
+:1 rdf:type :LightingDevice ;
+    rdfs:label "1" ;
+    :etag "89aa3edab2bc19ea938c6c5a227d6f" .
+
+:2 rdf:type :LightingDevice ;
+    rdfs:label "2" ;
+    :etag "532937c8a146934d035bb37e28119d" .
+
+:3 rdf:type :LightingDevice ;
+    rdfs:label "3" ;
+    :etag "5c0f881db26e38d5a68d4e38ccc8e6" .
