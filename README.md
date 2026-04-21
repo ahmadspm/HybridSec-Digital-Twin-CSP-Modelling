@@ -1,5 +1,7 @@
 # HySecTwin: Hybrid Reasoning Security Digital Twin for Cyber-Physical Systems
 
+<img width="1855" height="712" alt="Hyb-sec-twni-framework (1)" src="https://github.com/user-attachments/assets/da6f44f8-a11b-4bec-b669-47d4bc15057a" />
+
 ## Overview
 
 This repository provides the reproducibility package, source code, datasets, scripts, and experimental artifacts for the paper:
