@@ -1,0 +1,330 @@
+
+# Option A — Quickest: import with mongoimport (1 doc snapshot)
+# Use this if you just want the JSON stored as a single document you can query later.
+# Copy the JSON file into the MongoDB container:
+# Step 1.  
+docker cp ./src/18022025_lightswitch.json docker-mongodb-1:/lightswitch.json
+
+
+
+# Step 2. Import it as one document into DB lightswitch, collection snapshot:
+
+docker exec -it docker-mongodb-1 \
+  mongoimport --db lightswitch --collection snapshot --file /lightswitch.json
+
+# Step 3. Verify:
+
+docker exec -it docker-mongodb-1 mongosh --eval 'use lightswitch; db.snapshot.findOne()'
+
+
+# Option B — Use your Python script (populate_mongodb.py works now, just be aware)
+# Step 1.  - Your script will insert exactly what it loads. Because the JSON is an object, it will insert one document (not multiple). It currently targets collection devices, which might be a misnomer for a snapshot import—consider switching to snapshot.
+# Run it from a container (recommended)
+Inside your Compose network the host is already mongodb, so no change to MONGO_URI is needed. Run the script in your Python app container (the one that already mounts ./src:/app)
+
+# from the repo root, where docker-compose.yml lives
+docker compose run --rm durable-rules python /app/populate_mongodb.py
+
+# Step 2. 
+# When it asks whether to drop the collection, answer yes or pipe it:
+
+printf "yes\n" | docker compose run --rm durable-rules python /app/populate_mongodb.py
+
+# Why this works:
+
+Script’s MONGO_URI is mongodb://mongodb:27017/ (resolves inside the Compose network). 
+
+It loads ./18022025_lightswitch.json (with your src bind-mount that maps to /app). 
+
+It will insert a single doc since the JSON is not a list.
+
+# Sanity checks & persistence
+
+# Auth on/off? You already checked connectionStatus:1 before; if you enable auth later, the guide’s steps for users/# roles and re-running mongoimport apply. 
+ docker exec -it docker-mongodb-1 mongosh --eval 'use lightswitch; show collections; db.snapshot.countDocuments()'
+
+####################################################################
+# Verify after import:
+# Verify what’s in MongoDB
+# Count documents in the snapshot collection (should be 1)
+
+docker exec -it docker-mongodb-1 \
+  mongosh --quiet --eval 'const d=db.getSiblingDB("lightswitch"); printjson(d.snapshot.countDocuments({}))'
+
+# Show the single snapshot document
+docker exec -it docker-mongodb-1 \
+  mongosh --quiet --eval 'const d=db.getSiblingDB("lightswitch"); const doc=d.snapshot.findOne(); printjson(doc)'
+
+# List collection names (replacement for `show collections`)
+docker exec -it docker-mongodb-1 \
+  mongosh --quiet --eval 'const d=db.getSiblingDB("lightswitch"); printjson(d.getCollectionNames())'
+
+######################################################################
+
+
+
+#######################################################################
+
+Excellent — since your script returned `Import successful.`, the JSON schema has been loaded into MongoDB.
+
+Let’s confirm it step by step using the MongoDB shell (`mongosh`):
+
+######################################################################
+
+### ✅ Step 1: Open the MongoDB Shell
+
+```bash
+docker exec -it docker-mongodb-1 mongosh
+```
+
+If you're not using Docker, and MongoDB is running locally:
+
+```bash
+mongosh
+```
+
+---
+
+### ✅ Step 2: Switch to the Database
+
+```js
+use iot_network
+```
+
+---
+
+### ✅ Step 3: List Collections
+
+```js
+show collections
+```
+
+You should see:
+```
+lightswitch
+```
+
+---
+
+### ✅ Step 4: View Sample Documents
+
+```js
+db.lightswitch.find().limit(3).pretty()
+```
+
+This will show up to 3 device entries with readable formatting. Example output:
+
+```json
+{
+  "_id": "light001",
+  "name": "Living Room Light",
+  "state": "on",
+  "type": "switch"
+}
+```
+
+---
+
+### ✅ Optional: Count Devices
+
+```js
+db.lightswitch.countDocuments()
+```
+
+To confirm how many CPS devices were loaded.
+
+---
+
+Let me know if you'd like a Python script or HTTP REST API to query it instead — especially if you want to confirm schema presence from within the app.
+
+
+# Copy the File into the MongoDB Container
+docker cp lightswitch.json docker-mongodb-1:/lightswitch.json
+
+# Run the Import Command
+docker exec -it docker-mongodb-1 mongoimport --db lightswitch --collection lightswitch --file /lightswitch.json -
+
+
+# **Step-by-Step Tutorial: Importing JSON into MongoDB with Authentication and Ensuring Data Persistence**
+
+This tutorial provides step-by-step instructions to import a JSON file (`lightswitch.json`) into a MongoDB database (`lightswitch`) using the terminal. It also covers authentication issues, data persistence, and how to resolve them.
+
+---
+## **1. Verify MongoDB Authentication**
+
+Check if MongoDB requires authentication:
+```bash
+docker exec -it docker-mongodb-1 mongosh --eval 'db.runCommand({ connectionStatus: 1 })'
+# docker exec -it mongodb mongosh --eval 'db.runCommand({ connectionStatus: 1 })'
+```
+- If `authInfo` contains credentials, authentication is enabled.
+- If `authInfo` is empty, authentication is **not enabled**.
+
+---
+## **2. Import JSON Data into MongoDB**
+
+Run the following command to import `lightswitch.json` into the `lightswitch` database:
+```bash
+docker exec -i docker-mongodb-1 mongoimport --db lightswitch --collection lightswitch \
+  --file /lightswitch.json --username root --password password --authenticationDatabase admin
+```
+
+To verify the import:
+```bash
+docker exec -it mongodb mongosh --username root --password password --authenticationDatabase admin --eval 'db.lightswitch.find().pretty()'
+```
+
+If authentication fails, continue with the next steps to fix permissions.
+
+---
+## **3. Fix "Unauthorized: Command listCollections requires authentication" Error**
+
+If running `show collections` results in an authentication error, follow these steps.
+
+### **3.1 Log in as Root**
+```bash
+docker exec -it mongodb mongosh --username root --password password --authenticationDatabase admin
+```
+
+### **3.2 Check User Roles**
+```javascript
+db.getUser("root")
+```
+If the output does not include **readWrite** permissions for `lightswitch`, grant them.
+
+### **3.3 Grant Permissions to Root User**
+Switch to the `admin` database:
+```javascript
+use admin
+```
+Grant **readWrite** permissions for `lightswitch`:
+```javascript
+db.grantRolesToUser("root", [{ role: "readWrite", db: "lightswitch" }])
+```
+
+### **3.4 Verify Permissions**
+Switch back to `lightswitch`:
+```javascript
+use lightswitch
+show collections
+db.lightswitch.find().pretty()
+```
+
+If successful, your import and authentication settings are correct.
+
+---
+## **4. Alternative: Create a New User for `lightswitch`**
+
+Instead of modifying `root`, you can create a new user with read/write access.
+
+### **4.1 Create a New User**
+```javascript
+use lightswitch
+db.createUser({
+    user: "lightswitch_user",
+    pwd: "securepassword",
+    roles: [{ role: "readWrite", db: "lightswitch" }]
+})
+```
+
+### **4.2 Log in as `lightswitch_user`**
+```bash
+docker exec -it mongodb mongosh --username lightswitch_user --password securepassword --authenticationDatabase lightswitch
+```
+### **4.3 Verify Collections and Data**
+```javascript
+show collections
+db.lightswitch.find().pretty()
+```
+
+---
+## **5. Ensure MongoDB Data Persistence**
+
+### **5.1 Verify If MongoDB Data is Persisting**
+Run:
+```bash
+docker volume ls
+```
+Ensure the following volumes exist:
+```
+local     docker_benchmark_mongo-config
+local     docker_benchmark_mongo-data
+```
+
+### **5.2 Insert and Verify Data Persistence**
+1. **Insert Test Data**
+   ```bash
+   docker exec -it mongodb mongosh --username root --password password --authenticationDatabase admin
+   ```
+   Inside MongoDB:
+   ```javascript
+   use lightswitch
+   db.lightswitch.insertOne({ "test": "data" })
+   db.lightswitch.find().pretty()
+   ```
+
+2. **Restart MongoDB**
+   ```bash
+   docker restart docker-mongodb-1
+   ```
+
+3. **Check If Data Still Exists**
+   ```bash
+   docker exec -it mongodb mongosh --username root --password password --authenticationDatabase admin
+   ```
+   ```javascript
+   use lightswitch
+   db.lightswitch.find().pretty()
+   ```
+   - ✅ If `{ "test": "data" }` appears, persistence is working.
+   - ❌ If data is missing, check if the correct volumes are mounted.
+
+### **5.3 Check Mounted Volumes Inside the Container**
+```bash
+docker inspect mongodb | grep "Mounts"
+```
+Expected output:
+```json
+"Source": "/var/lib/docker/volumes/docker_benchmark_mongo-data/_data",
+"Destination": "/data/db",
+"Source": "/var/lib/docker/volumes/docker_benchmark_mongo-config/_data",
+"Destination": "/data/configdb",
+```
+If missing, MongoDB is not using the correct volumes.
+
+---
+## **6. Debugging & Additional Commands**
+
+### **6.1 Check Existing Databases**
+```javascript
+show dbs
+```
+
+### **6.2 Check Collections in a Database**
+```javascript
+show collections
+```
+
+### **6.3 Count Documents in a Collection**
+```javascript
+db.lightswitch.countDocuments()
+```
+
+### **6.4 Check if JSON Import Was Successful**
+```bash
+docker exec -i mongodb mongoimport --db lightswitch --collection lightswitch \
+  --file /lightswitch.json --jsonArray --verbose --username root --password password --authenticationDatabase admin
+```
+
+If `--jsonArray` is needed, your JSON file likely contains an array of objects.
+
+---
+## **Conclusion**
+- If you face authentication errors, grant proper permissions or create a new user.
+- Always verify imports using `find().pretty()`.
+- Ensure MongoDB data persists across restarts using volume checks.
+- Use `show collections` and `countDocuments()` to check data presence.
+
+This tutorial ensures you can reliably import `lightswitch.json` into MongoDB and maintain data persistence in future setups. 🚀
+
+

@@ -1,0 +1,32 @@
+
+Using the Eclipse Ditto API UI Connections platform to create a 'Live' connection to the EMQX server.
+
+{
+  "name": "mqtt-live-connection",
+  "connectionType": "mqtt",
+  "connectionStatus": "open",
+  "uri": "tcp://emqx:1883",
+  "sources": [
+    {
+      "addresses": ["cps/#"],
+      "authorizationContext": ["ditto:inbound-auth-subject"],
+      "consumerCount": 1,
+      "qos": 1,
+      "enforcement": {
+        "input": "{{ source:address }}",
+        "filters": ["cps/org.eclipse.ditto:active:*"]
+      },
+      "payloadMapping": ["Ditto"]
+    }
+  ],
+  "targets": [
+    {
+      "address": "cps/{{ thing:id }}",
+      "topics": ["_/_/things/live/events"],
+      "authorizationContext": ["ditto:outbound-auth-subject"],
+      "qos": 1,
+      "headerMapping": {}
+    }
+  ]
+}
+

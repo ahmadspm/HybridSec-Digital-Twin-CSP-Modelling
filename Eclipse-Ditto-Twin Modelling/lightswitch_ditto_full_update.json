@@ -1,0 +1,388 @@
+{
+    "thingId": "org.eclipse.ditto:lightswitch:d1700613-795e-470d-b2a0-113204e445f4",
+    "policyId": "my.test:policy",
+    "attributes": {
+        "deviceName": "ConBee III",
+        "modelId": "deCONZ",
+        "bridgeId": "00212EFFFF0E192C",
+        "fwVersion": "0x264d0900",
+        "ipAddress": "192.168.0.29",
+        "mac": "c4:3d:1a:e9:d5:ef",
+        "rfConnected": true
+    },
+    "features": {
+        "lights": {
+            "properties": {
+                "1": {
+                    "capabilities": {
+                        "alerts": [
+                            "none",
+                            "select",
+                            "lselect"
+                        ],
+                        "color": {
+                            "ct": {
+                                "max": 65279,
+                                "min": 250
+                            },
+                            "modes": [
+                                "ct"
+                            ]
+                        }
+                    },
+                    "colorcapabilities": 16,
+                    "config": {
+                        "groups": [
+                            "0",
+                            "1",
+                            "2"
+                        ]
+                    },
+                    "ctmax": 65279,
+                    "ctmin": 250,
+                    "etag": "e2453194c822e59b21378f32f0ec7ca0",
+                    "hascolor": true,
+                    "lastannounced": "2025-03-14T02:10:35Z",
+                    "lastseen": "2025-03-14T02:22Z",
+                    "manufacturername": "IKEA of Sweden",
+                    "modelid": "TRADFRIbulbE27WSglobeopal1055lm",
+                    "name": "Color temperature light 1",
+                    "state": {
+                        "alert": "none",
+                        "bri": 43,
+                        "colormode": "ct",
+                        "ct": 334,
+                        "on": true,
+                        "reachable": false
+                    },
+                    "swversion": "1.0.012",
+                    "type": "Color temperature light",
+                    "uniqueid": "04:cd:15:ff:fe:c8:aa:6e-01"
+                },
+                "2": {
+                    "capabilities": {
+                        "alerts": [
+                            "none",
+                            "select",
+                            "lselect"
+                        ]
+                    },
+                    "config": {
+                        "groups": [
+                            "0",
+                            "1",
+                            "2"
+                        ]
+                    },
+                    "etag": "186d41cefbe9e6dca758636feb2045fd",
+                    "hascolor": false,
+                    "lastannounced": "2025-03-14T00:48:20Z",
+                    "lastseen": "2025-03-14T02:26Z",
+                    "manufacturername": "IKEA of Sweden",
+                    "modelid": "TRADFRI bulb E27 WW 806lm",
+                    "name": "Dimmable light 2",
+                    "state": {
+                        "alert": "none",
+                        "bri": 22,
+                        "on": true,
+                        "reachable": false
+                    },
+                    "swversion": "2.3.086",
+                    "type": "Dimmable light",
+                    "uniqueid": "04:cd:15:ff:fe:69:55:6b-01"
+                },
+                "3": {
+                    "capabilities": {
+                        "alerts": [
+                            "none",
+                            "select",
+                            "lselect"
+                        ]
+                    },
+                    "config": {
+                        "groups": [
+                            "0",
+                            "1",
+                            "2"
+                        ]
+                    },
+                    "etag": "77735f81341596c9f8ce66ca3e388e7f",
+                    "hascolor": false,
+                    "lastannounced": "2025-03-03T09:29:43Z",
+                    "lastseen": "2025-03-14T04:12Z",
+                    "manufacturername": "IKEA of Sweden",
+                    "modelid": "TRADFRI control outlet",
+                    "name": "On/Off plug-in unit 3",
+                    "state": {
+                        "alert": "none",
+                        "on": true,
+                        "reachable": true
+                    },
+                    "swversion": "0x20024623",
+                    "type": "On/Off plug-in unit",
+                    "uniqueid": "b4:e3:f9:ff:fe:a0:c1:b7-01"
+                },
+                "4": {
+                    "capabilities": {
+                        "alerts": [
+                            "none",
+                            "select",
+                            "lselect"
+                        ]
+                    },
+                    "config": {
+                        "groups": [
+                            "0",
+                            "1",
+                            "2"
+                        ]
+                    },
+                    "etag": "25260297da1e16345ded6a7e7f1e6485",
+                    "hascolor": false,
+                    "lastannounced": "2024-10-20T07:26:17Z",
+                    "lastseen": "2025-03-14T04:12Z",
+                    "manufacturername": "IKEA of Sweden",
+                    "modelid": "TRADFRI control outlet",
+                    "name": "On/Off plug-in unit 4",
+                    "state": {
+                        "alert": "none",
+                        "on": true,
+                        "reachable": true
+                    },
+                    "swversion": "2.0.024",
+                    "type": "On/Off plug-in unit",
+                    "uniqueid": "b4:e3:f9:ff:fe:a6:65:90-01"
+                },
+                "5": {
+                    "capabilities": {
+                        "alerts": [
+                            "none",
+                            "select",
+                            "lselect"
+                        ],
+                        "color": {
+                            "ct": {
+                                "max": 65279,
+                                "min": 250
+                            },
+                            "modes": [
+                                "ct"
+                            ]
+                        }
+                    },
+                    "colorcapabilities": 16,
+                    "config": {
+                        "groups": [
+                            "0",
+                            "1",
+                            "2"
+                        ]
+                    },
+                    "ctmax": 65279,
+                    "ctmin": 250,
+                    "etag": "7ecc174d3569bd955cb5db17ce3a0f80",
+                    "hascolor": true,
+                    "lastannounced": "2025-03-14T00:48:15Z",
+                    "lastseen": "2025-03-14T02:22Z",
+                    "manufacturername": "IKEA of Sweden",
+                    "modelid": "TRADFRIbulbE27WSglobeopal1055lm",
+                    "name": "Color temperature light 5",
+                    "state": {
+                        "alert": "none",
+                        "bri": 22,
+                        "colormode": "ct",
+                        "ct": 334,
+                        "on": true,
+                        "reachable": false
+                    },
+                    "swversion": "1.0.012",
+                    "type": "Color temperature light",
+                    "uniqueid": "04:cd:15:ff:fe:c8:c0:12-01"
+                },
+                "6": {
+                    "etag": "32cff0c22466e00b1d3a7f1713d47201",
+                    "hascolor": false,
+                    "lastannounced": null,
+                    "lastseen": "2024-01-23T05:37Z",
+                    "manufacturername": "dresden elektronik",
+                    "modelid": "ConBee II",
+                    "name": "Configuration tool 6",
+                    "state": {
+                        "reachable": true
+                    },
+                    "swversion": null,
+                    "type": "Configuration tool",
+                    "uniqueid": "00:21:2e:ff:ff:08:3d:2b-01"
+                }
+            }
+        },
+        "sensors": {
+            "properties": {
+                "1": {
+                    "config": {
+                        "configured": true,
+                        "on": true,
+                        "sunriseoffset": 30,
+                        "sunsetoffset": -30
+                    },
+                    "etag": "1f35a0be77be5266d9aeac496d9e1497",
+                    "manufacturername": "Philips",
+                    "modelid": "PHDL00",
+                    "name": "Daylight",
+                    "state": {
+                        "dark": false,
+                        "daylight": true,
+                        "lastupdated": "2025-03-14T01:07:58.090",
+                        "status": 160,
+                        "sunrise": "2025-03-13T22:16:44",
+                        "sunset": "2025-03-14T10:37:40"
+                    },
+                    "swversion": "1.0",
+                    "type": "Daylight",
+                    "uniqueid": "00:21:2e:ff:ff:0e:19:2c-01"
+                },
+                "3": {
+                    "config": {
+                        "battery": 71,
+                        "offset": 0,
+                        "on": true,
+                        "reachable": true
+                    },
+                    "ep": 1,
+                    "etag": "f2372d67e1746e3f3650f6f07fc8df66",
+                    "lastannounced": "2024-10-12T06:06:46Z",
+                    "lastseen": "2025-03-14T03:25Z",
+                    "manufacturername": "LUMI",
+                    "modelid": "lumi.sensor_ht",
+                    "name": "Temperature 3",
+                    "state": {
+                        "lastupdated": "2025-03-14T03:25:07.844",
+                        "temperature": 2918
+                    },
+                    "swversion": "20160516",
+                    "type": "ZHATemperature",
+                    "uniqueid": "00:15:8d:00:04:9d:c6:54-01-0402"
+                },
+                "4": {
+                    "config": {
+                        "battery": 71,
+                        "offset": 0,
+                        "on": true,
+                        "reachable": true
+                    },
+                    "ep": 1,
+                    "etag": "639d854c5c6e411f0204c3a342d75b0c",
+                    "lastannounced": "2024-10-12T06:06:46Z",
+                    "lastseen": "2025-03-14T03:25Z",
+                    "manufacturername": "LUMI",
+                    "modelid": "lumi.sensor_ht",
+                    "name": "Humidity 4",
+                    "state": {
+                        "humidity": 7101,
+                        "lastupdated": "2025-03-14T03:25:07.844"
+                    },
+                    "swversion": "20160516",
+                    "type": "ZHAHumidity",
+                    "uniqueid": "00:15:8d:00:04:9d:c6:54-01-0405"
+                },
+                "5": {
+                    "config": {
+                        "battery": 100,
+                        "on": true,
+                        "reachable": true,
+                        "temperature": 0
+                    },
+                    "ep": 1,
+                    "etag": "f2de7d5f86e3b16ac268310b02ed2539",
+                    "lastannounced": "2024-11-07T03:30:12Z",
+                    "lastseen": "2025-03-14T03:51Z",
+                    "manufacturername": "LUMI",
+                    "modelid": "lumi.sensor_magnet",
+                    "name": "Window / Door Sensor",
+                    "state": {
+                        "lastupdated": "2025-03-14T01:44:31.760",
+                        "open": false
+                    },
+                    "type": "ZHAOpenClose",
+                    "uniqueid": "00:15:8d:00:05:22:b0:5e-01-0006"
+                },
+                "6": {
+                    "config": {
+                        "mode": "sunset",
+                        "offset": 0,
+                        "on": true,
+                        "reachable": true
+                    },
+                    "etag": "609744bbafb0cd0071f525ef944d3fee",
+                    "manufacturername": "Phoscon",
+                    "modelid": "DLOFFSET1200",
+                    "name": "Offset Ref P-SS",
+                    "state": {
+                        "lastupdated": "2025-03-14T01:08:28.211",
+                        "localtime": "2025-03-14T18:37:40"
+                    },
+                    "swversion": "1.0",
+                    "type": "CLIPDaylightOffset",
+                    "uniqueid": "5A:2C:AA:CB-B5BA-7892-91C8-FE:1A:6D:F3:D1:9B"
+                },
+                "7": {
+                    "config": {
+                        "mode": "sunrise",
+                        "offset": 0,
+                        "on": true,
+                        "reachable": true
+                    },
+                    "etag": "811855fef05e29063925b28573014822",
+                    "manufacturername": "Phoscon",
+                    "modelid": "DLOFFSET1010",
+                    "name": "Offset Ref P-SR",
+                    "state": {
+                        "lastupdated": "2025-03-14T01:07:58.091",
+                        "localtime": "2025-03-14T06:16:44"
+                    },
+                    "swversion": "1.0",
+                    "type": "CLIPDaylightOffset",
+                    "uniqueid": "B6:B4:42:2C-BB04-9A46-AC1F-9B:E8:96:D6:A7:4F"
+                },
+                "8": {
+                    "config": {
+                        "mode": "sunset",
+                        "offset": -325,
+                        "on": true,
+                        "reachable": true
+                    },
+                    "etag": "e36d7a1e9d97ab789976768ec1d90f73",
+                    "manufacturername": "Phoscon",
+                    "modelid": "DLOFFSET10022",
+                    "name": "Offset Ref P202",
+                    "state": {
+                        "lastupdated": "2025-03-14T01:08:38.212",
+                        "localtime": "2025-03-14T13:12:40"
+                    },
+                    "swversion": "1.0",
+                    "type": "CLIPDaylightOffset",
+                    "uniqueid": "C5:8E:F0:98-48CF-BC7E-B7ED-15:CD:61:12:97:E5"
+                },
+                "9": {
+                    "config": {
+                        "mode": "sunset",
+                        "offset": 234,
+                        "on": true,
+                        "reachable": true
+                    },
+                    "etag": "e6222c5b64044e35f10bcbd8bdd76ed8",
+                    "manufacturername": "Phoscon",
+                    "modelid": "DLOFFSET2021",
+                    "name": "Offset Ref P222",
+                    "state": {
+                        "lastupdated": "2025-03-14T01:08:08.211",
+                        "localtime": "2025-03-14T22:31:40"
+                    },
+                    "swversion": "1.0",
+                    "type": "CLIPDaylightOffset",
+                    "uniqueid": "B0:B3:90:84-D6A6-7501-A5D3-9F:11:13:5F:4A:0C"
+                }
+            }
+        }
+    }
+}

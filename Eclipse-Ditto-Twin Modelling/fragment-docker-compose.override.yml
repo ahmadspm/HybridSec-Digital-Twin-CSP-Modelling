@@ -1,0 +1,206 @@
+
+
+    Folder Structure:
+
+    project-root/
+├── docker-compose.yml
+├── docker-compose.override.yml
+├── deconz_to_mqtt/
+│   ├── deconz_to_mqtt.py
+│   └── Dockerfile
+└── mongo_writer/
+    ├── mongo_writer.py
+    └── Dockerfile
+
+
+
+## version: '3.8'
+
+services:
+
+  deconz-mqtt-publisher:
+    container_name: deconz-mqtt-publisher
+    build:
+      context: ./deconz_to_mqtt
+    depends_on:
+      - emqx
+    networks:
+      - ditto_network
+    restart: unless-stopped
+    environment:
+      - MQTT_BROKER=emqx
+
+  mongo-writer:
+    container_name: mongo-writer
+    build:
+      context: ./mongo_writer
+    depends_on:
+      - emqx
+      - mongodb
+    networks:
+      - ditto_network
+    restart: unless-stopped
+    environment:
+      - MONGO_URI=mongodb://mongodb:27017/
+      - MQTT_BROKER=emqx
+
+networks:
+  ditto_network:
+    external: true
+
+
+
+
+
+
+Folder Structure:
+
+    project-root/
+├── docker-compose.yml
+├── docker-compose.override.yml
+├── deconz_to_mqtt/
+│   ├── deconz_to_mqtt.py
+│   └── Dockerfile
+└── mongo_writer/
+    ├── mongo_writer.py
+    └── Dockerfile
+
+Create the following simple Dockerfile in ./deconz_to_mqtt:
+
+FROM python:3.11-slim
+
+WORKDIR /app
+
+COPY deconz_to_mqtt.py .
+
+RUN pip install paho-mqtt websocket-client
+
+CMD ["python", "deconz_to_mqtt.py"]
+
+
+
+✅ (a) deconz_to_mqtt.py
+
+
+import websocket
+import json
+import paho.mqtt.client as mqtt
+
+MQTT_BROKER = "emqx"
+MQTT_PORT = 1883
+MQTT_TOPIC_PREFIX = "cps"
+
+DECONZ_WS_URL = "ws://host.docker.internal:8080"
+
+def on_message(ws, message):
+    try:
+        data = json.loads(message)
+        if 'id' in data and 'r' in data and 'state' in data:
+            device_id = data['id']
+            payload = json.dumps(data)
+            topic = f"{MQTT_TOPIC_PREFIX}/{device_id}/state"
+            mqtt_client.publish(topic, payload)
+            print(f"Published to {topic}: {payload}")
+    except Exception as e:
+        print("Error handling message:", e)
+
+def on_open(ws):
+    print("Connected to deCONZ WebSocket")
+
+def on_error(ws, error):
+    print("WebSocket error:", error)
+
+def on_close(ws):
+    print("WebSocket closed")
+
+if __name__ == "__main__":
+    mqtt_client = mqtt.Client()
+    mqtt_client.connect(MQTT_BROKER, MQTT_PORT, 60)
+    mqtt_client.loop_start()
+
+    ws = websocket.WebSocketApp(DECONZ_WS_URL,
+                                on_message=on_message,
+                                on_open=on_open,
+                                on_error=on_error,
+                                on_close=on_close)
+    ws.run_forever()
+
+
+
+✅ (b) Docker Compose Service for deconz_to_mqtt.py
+
+Add the following to my docker-compose.override.yml:
+
+
+
+
+
+
+
+And in ./mongo_writer/Dockerfile:
+
+FROM python:3.11-slim
+
+WORKDIR /app
+
+COPY mongo_writer.py .
+
+RUN pip install paho-mqtt pymongo
+
+CMD ["python", "mongo_writer.py"]
+
+
+
+✅ (c) mongo_writer.py
+
+import json
+import paho.mqtt.client as mqtt
+from pymongo import MongoClient
+
+MQTT_BROKER = "emqx"
+MQTT_PORT = 1883
+MQTT_TOPIC = "cps/#"
+
+MONGO_URI = "mongodb://mongodb:27017/"
+DB_NAME = "iot_network"
+COLLECTION_NAME = "lightswitch"
+
+mongo_client = MongoClient(MONGO_URI)
+db = mongo_client[DB_NAME]
+collection = db[COLLECTION_NAME]
+
+def on_connect(client, userdata, flags, rc):
+    print(f"Connected to MQTT with result code {rc}")
+    client.subscribe(MQTT_TOPIC)
+
+def on_message(client, userdata, msg):
+    try:
+        payload = json.loads(msg.payload.decode())
+        collection.insert_one(payload)
+        print(f"Inserted to MongoDB: {payload}")
+    except Exception as e:
+        print("MongoDB insert error:", e)
+
+if __name__ == "__main__":
+    client = mqtt.Client()
+    client.on_connect = on_connect
+    client.on_message = on_message
+
+    client.connect(MQTT_BROKER, MQTT_PORT, 60)
+    client.loop_forever()
+    
+
+
+FROM python:3.11-slim
+
+WORKDIR /app
+
+COPY mongo_writer.py .
+
+RUN pip install paho-mqtt pymongo
+
+CMD ["python", "mongo_writer.py"]
+
+######################################
+
+docker-compose up --build -d
