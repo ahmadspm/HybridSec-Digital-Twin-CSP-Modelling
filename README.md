@@ -24,31 +24,8 @@ git clone https://github.com/ahmadspm/HybridSec-Digital-Twin-CSP-Modelling.git
 cd HybridSec-Digital-Twin-CSP-Modelling
 pip install -r requirements.txt
 docker-compose up -d
-python run_reproducibility.py
-```
+setupscript.py
 
-## Repository Structure
-
-```text
-HybridSec-Digital-Twin-CSP-Modelling/
-├── README.md
-├── requirements.txt
-├── docker-compose.yml
-├── run_reproducibility.py
-├── scripts/
-├── load_testing/
-└── misc/
-```
-
-## Experiments
-
-```bash
-python scripts/durable_rules_script.py
-python scripts/hybrid_engine_performance.py
-python scripts/simulate_c0012_attacks.py
-python scripts/benchmark_runner.py
-python scripts/generate_paper_figures.py
-```
 
 ## Technology Stack
 
