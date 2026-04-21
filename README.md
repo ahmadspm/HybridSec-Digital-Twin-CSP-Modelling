@@ -1,6 +1,8 @@
 # HySecTwin: Hybrid Reasoning Security Digital Twin for Cyber-Physical Systems
 
 Holmes, D., Mohsin, A., Nepal, S., Sikos, L., Sarker, I. H., & Janicke, H. (2026). HySecTwin: A Knowledge-Driven Digital Twin Framework Augmented with Hybrid Reasoning for Cyber-Physical Systems. Manuscript under review.
+
+
 <img width="1855" height="712" alt="Hyb-sec-twni-framework (1)" src="https://github.com/user-attachments/assets/da6f44f8-a11b-4bec-b669-47d4bc15057a" />
 
 ## Overview
