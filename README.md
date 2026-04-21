@@ -39,7 +39,7 @@ setupscript.py
 - Grafana
 - Docker
 
-## Citation
+# Citation
 
 ```bibtex
 @article{hysectwin2026,
