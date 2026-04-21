@@ -1,0 +1,63 @@
+@prefix : <http://example.org/hysectwin#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix saref: <https://saref.etsi.org/core/> .
+
+:HySecTwinOntology rdf:type owl:Ontology ;
+    rdfs:label "HySecTwin CPS Digital Twin Ontology" ;
+    rdfs:comment "SAREF-aligned ontology for CPS digital twin modelling and hybrid reasoning." .
+
+:LightingDevice rdf:type owl:Class ; rdfs:subClassOf saref:Device ; rdfs:label "Lighting Device" .
+:Sensor rdf:type owl:Class ; rdfs:subClassOf saref:Device ; rdfs:label "Sensor" .
+:Actuator rdf:type owl:Class ; rdfs:subClassOf saref:Device ; rdfs:label "Actuator" .
+:HVAC rdf:type owl:Class ; rdfs:subClassOf saref:Device ; rdfs:label "HVAC Device" .
+:State rdf:type owl:Class ; rdfs:label "State" .
+:Command rdf:type owl:Class ; rdfs:label "Command" .
+:Measurement rdf:type owl:Class ; rdfs:label "Measurement" .
+:Profile rdf:type owl:Class ; rdfs:label "Profile" .
+:Task rdf:type owl:Class ; rdfs:label "Task" .
+:Service rdf:type owl:Class ; rdfs:label "Service" .
+:OnOffFunction rdf:type owl:Class ; rdfs:subClassOf saref:Function ; rdfs:label "On/Off Function" .
+:TemperatureProperty rdf:type owl:Class ; rdfs:subClassOf saref:Property ; rdfs:label "Temperature Property" .
+:BrightnessProperty rdf:type owl:Class ; rdfs:subClassOf saref:Property ; rdfs:label "Brightness Property" .
+:HumidityProperty rdf:type owl:Class ; rdfs:subClassOf saref:Property ; rdfs:label "Humidity Property" .
+:NetworkTrafficRate rdf:type owl:Class ; rdfs:subClassOf saref:Property ; rdfs:label "Network Traffic Rate" .
+:FirmwareIntegrity rdf:type owl:Class ; rdfs:subClassOf saref:Property ; rdfs:label "Firmware Integrity" .
+:UnitOfMeasure rdf:type owl:Class ; rdfs:subClassOf saref:UnitOfMeasure ; rdfs:label "Unit of Measure" .
+
+:hasSensor rdf:type owl:ObjectProperty ; rdfs:domain saref:Device ; rdfs:range :Sensor .
+:hasActuator rdf:type owl:ObjectProperty ; rdfs:domain saref:Device ; rdfs:range :Actuator .
+:hasState rdf:type owl:ObjectProperty ; rdfs:domain saref:Device ; rdfs:range :State .
+:hasCommand rdf:type owl:ObjectProperty ; rdfs:domain saref:Device ; rdfs:range :Command .
+:hasMeasurement rdf:type owl:ObjectProperty ; rdfs:domain saref:Device ; rdfs:range :Measurement .
+:hasTask rdf:type owl:ObjectProperty ; rdfs:domain saref:Device ; rdfs:range :Task .
+:hasProfile rdf:type owl:ObjectProperty ; rdfs:domain saref:Device ; rdfs:range :Profile .
+:hasService rdf:type owl:ObjectProperty ; rdfs:domain saref:Device ; rdfs:range :Service .
+:hasFunction rdf:type owl:ObjectProperty ; rdfs:domain saref:Device ; rdfs:range saref:Function .
+:measuresProperty rdf:type owl:ObjectProperty ; rdfs:domain :Sensor ; rdfs:range saref:Property .
+:controlsProperty rdf:type owl:ObjectProperty ; rdfs:domain :Actuator ; rdfs:range saref:Property .
+:relatesToDevice rdf:type owl:ObjectProperty ; rdfs:domain :Measurement ; rdfs:range saref:Device .
+:hasUnit rdf:type owl:ObjectProperty ; rdfs:domain :Measurement ; rdfs:range :UnitOfMeasure .
+
+:uniqueId rdf:type owl:DatatypeProperty ; rdfs:domain saref:Device ; rdfs:range xsd:string .
+:lastSeen rdf:type owl:DatatypeProperty ; rdfs:domain saref:Device ; rdfs:range xsd:dateTime .
+:etag rdf:type owl:DatatypeProperty ; rdfs:domain saref:Device ; rdfs:range xsd:string .
+:manufacturerName rdf:type owl:DatatypeProperty ; rdfs:domain saref:Device ; rdfs:range xsd:string .
+:deviceType rdf:type owl:DatatypeProperty ; rdfs:domain saref:Device ; rdfs:range xsd:string .
+:reachable rdf:type owl:DatatypeProperty ; rdfs:domain saref:Device ; rdfs:range xsd:boolean .
+:on rdf:type owl:DatatypeProperty ; rdfs:domain :State ; rdfs:range xsd:boolean .
+:alert rdf:type owl:DatatypeProperty ; rdfs:domain :State ; rdfs:range xsd:string .
+:colorMode rdf:type owl:DatatypeProperty ; rdfs:domain :State ; rdfs:range xsd:string .
+:ct rdf:type owl:DatatypeProperty ; rdfs:domain :State ; rdfs:range xsd:integer .
+:ctmax rdf:type owl:DatatypeProperty ; rdfs:domain saref:Device ; rdfs:range xsd:integer .
+:colorCapabilities rdf:type owl:DatatypeProperty ; rdfs:domain saref:Device ; rdfs:range xsd:integer .
+:brightness rdf:type owl:DatatypeProperty ; rdfs:domain :Measurement ; rdfs:range xsd:integer .
+:temperature rdf:type owl:DatatypeProperty ; rdfs:domain :Measurement ; rdfs:range xsd:decimal .
+:humidity rdf:type owl:DatatypeProperty ; rdfs:domain :Measurement ; rdfs:range xsd:decimal .
+:networkTrafficPps rdf:type owl:DatatypeProperty ; rdfs:domain :Measurement ; rdfs:range xsd:integer .
+:firmwareStatus rdf:type owl:DatatypeProperty ; rdfs:domain :State ; rdfs:range xsd:string .
+:commandName rdf:type owl:DatatypeProperty ; rdfs:domain :Command ; rdfs:range xsd:string .
+:commandSource rdf:type owl:DatatypeProperty ; rdfs:domain :Command ; rdfs:range xsd:string .
+:confidenceScore rdf:type owl:DatatypeProperty ; rdfs:domain :Measurement ; rdfs:range xsd:decimal .

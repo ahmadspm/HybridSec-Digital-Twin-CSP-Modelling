@@ -1,0 +1,43 @@
+@prefix : <http://example.org/hysectwin#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+:LightDevice_1 rdf:type :LightingDevice ;
+    rdfs:label "Lighting Device 1" ;
+    :uniqueId "04:cd:15:ff:fe:c8:aa:6e-01" ;
+    :lastSeen "2023-03-26T08:26:00Z"^^xsd:dateTime ;
+    :etag "89aa3edab2bc19ea938c6c5a227d6f" ;
+    :manufacturerName "IKEA of Sweden" ;
+    :deviceType "Color temperature light" ;
+    :ctmax 454 ; :colorCapabilities 16 ; :reachable true ;
+    :hasSensor :Sensor_1 ; :hasActuator :Actuator_1 ; :hasState :State_1 ;
+    :hasCommand :Command_1 ; :hasMeasurement :Measurement_1 ;
+    :hasTask :Task_1 ; :hasProfile :Profile_1 ; :hasService :Service_1 ; :hasFunction :OnOffFunction_1 .
+
+:Sensor_1 rdf:type :Sensor ; rdfs:label "Light Sensor 1" .
+:Actuator_1 rdf:type :Actuator ; rdfs:label "Light Actuator 1" .
+:State_1 rdf:type :State ; :on true ; :alert "none" ; :colorMode "ct" ; :ct 250 ; :firmwareStatus "healthy" .
+:Command_1 rdf:type :Command ; :commandName "set_light_state" ; :commandSource "trusted_controller" .
+:Measurement_1 rdf:type :Measurement ; :brightness 36 ; :temperature 24.0 ; :humidity 51.0 ; :networkTrafficPps 120 ; :confidenceScore 0.18 ; :relatesToDevice :LightDevice_1 .
+:Task_1 rdf:type :Task ; rdfs:label "Lighting control task" .
+:Profile_1 rdf:type :Profile ; rdfs:label "Lighting profile" .
+:Service_1 rdf:type :Service ; rdfs:label "Lighting service" .
+:OnOffFunction_1 rdf:type :OnOffFunction ; rdfs:label "On/Off function" .
+
+:LightDevice_2 rdf:type :LightingDevice ;
+    rdfs:label "Lighting Device 2" ;
+    :uniqueId "04:cd:15:ff:fe:c8:c0:12-01" ;
+    :lastSeen "2023-03-26T08:27:00Z"^^xsd:dateTime ;
+    :etag "532937c8a146934d035bb37e28119d" ;
+    :manufacturerName "IKEA of Sweden" ;
+    :deviceType "Color temperature light" ;
+    :ctmax 454 ; :colorCapabilities 16 ; :reachable true ;
+    :hasSensor :Sensor_2 ; :hasActuator :Actuator_2 ; :hasState :State_2 ;
+    :hasCommand :Command_2 ; :hasMeasurement :Measurement_2 .
+
+:Sensor_2 rdf:type :Sensor ; rdfs:label "Light Sensor 2" .
+:Actuator_2 rdf:type :Actuator ; rdfs:label "Light Actuator 2" .
+:State_2 rdf:type :State ; :on false ; :alert "anomalous" ; :colorMode "ct" ; :ct 250 ; :firmwareStatus "degraded" .
+:Command_2 rdf:type :Command ; :commandName "remote_toggle" ; :commandSource "untrusted_smb_session" .
+:Measurement_2 rdf:type :Measurement ; :brightness 0 ; :temperature 24.0 ; :humidity 49.0 ; :networkTrafficPps 850 ; :confidenceScore 0.81 ; :relatesToDevice :LightDevice_2 .

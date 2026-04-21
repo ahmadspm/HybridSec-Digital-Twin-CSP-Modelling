@@ -1,0 +1,31 @@
+{
+  "thingId": "live/04-cd-15-ff-fe-c8-aa-6e-01/state",
+  "attributes": {"project": "Lightswitch"},
+  "features": {
+    "lights": {
+      "2": {
+        "colorcapabilities": 16,
+        "ctmax": 454,
+        "etag": "0f1f511fe2958521437c262940734eb0",
+        "manufacturername": "IKEA of Sweden",
+        "type": "Color temperature light",
+        "uniqueid": "04:cd:15:ff:fe:c8:aa:6e-01",
+        "state": {
+          "alert": "none",
+          "bri": 36,
+          "colormode": "ct",
+          "ct": 250,
+          "on": true,
+          "reachable": true
+        }
+      }
+    }
+  },
+  "telemetry": {
+    "temperature": 24.0,
+    "humidity": 51.0,
+    "network_traffic_pps": 120,
+    "confidence_score": 0.18
+  },
+  "command": {"name": "set_light_state", "source": "trusted_controller"}
+}
