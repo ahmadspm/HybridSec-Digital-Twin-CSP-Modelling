@@ -1,6 +1,6 @@
 # HySecTwin reasoning reproducibility package
 
-This directory consolidates the methodological artefacts needed to reproduce the semantic-to-reasoning workflow described in the HySecTwin paper.
+This directory consolidates the methodological artefacts needed to reproduce the semantic-to-reasoning workflow.
 
 ## Contents
 
@@ -26,6 +26,3 @@ The reference flow is:
 
 The deterministic examples are the executable rules in `BenchMark/durable_rules_script.py`. The fuzzy configuration in this directory provides an explicit reference implementation of the membership functions and thresholds corresponding to the manuscript's uncertainty-aware reasoning description and Figure 3 examples.
 
-## Important scope note
-
-The historical latency and throughput CSV files under `DT-Dataset-Analysis/` are preserved unchanged. The files in this directory document and expose the reasoning configuration for methodological reproducibility; they do not retroactively regenerate or alter the historical benchmark measurements.
