@@ -6,12 +6,12 @@ This document makes the reference reasoning configuration explicit for inspectio
 
 ## 1. Deterministic rule examples aligned with the testbed
 
-The article operationalises campaign-inspired behaviours as observable conditions in the smart-lighting CPS. Deterministic rules therefore operate on light/device state, control commands, configuration/state consistency, reachability, sensor observations, and PT-DT consistency rather than on PLC, HMI, RTU, or Modbus-specific variables.
+This work operationalises campaign-inspired behaviours as observable conditions in the smart-lighting CPS. Deterministic rules therefore operate on light/device state, control commands, configuration/state consistency, reachability, sensor observations, and PT-DT consistency.
 
 | Testbed-observable rule condition | Article mapping | Deterministic outcome |
 |---|---|---|
-| Remote/unexpected control of a light without an authorised control context | C0012 / unauthorized remote control | Security alert |
-| Command changes a light state outside the expected control sequence | C0012 / malicious or unexpected command execution | Security alert |
+| Remote/unexpected control of a light without an authorised control context | C0012 / unauthorized remote control | Security event |
+| Command changes a light state outside the expected control sequence | C0012 / malicious or unexpected command execution | Security event |
 | Reported light state is inconsistent with its expected/configured state | C0012 / configuration or state tampering | Security alert |
 | Light reports OFF while illumination/context indicates an active-light condition | C0025 / logical-physical state mismatch | Security alert |
 | Digital twin reports light ON while the corresponding physical observation indicates OFF | C0025 / DT state spoofing / PT-DT inconsistency | Security alert |
@@ -104,4 +104,4 @@ Representative facts include light ON/OFF state, brightness, reachability, switc
 
 ## 8. Relationship to historical experiments
 
-The repository's historical `DT-Dataset-Analysis/` CSV files and legacy benchmark scripts are preserved unchanged. This reproducibility package documents a testbed-aligned reference reasoning configuration for inspection and future reruns; it does not retroactively claim that every historical CSV was generated with this newly documented reference configuration.
+ This reproducibility package documents a testbed-aligned reference reasoning configuration for inspection and future reruns; it does not retroactively claim that every historical CSV was generated with this newly documented reference configuration.
