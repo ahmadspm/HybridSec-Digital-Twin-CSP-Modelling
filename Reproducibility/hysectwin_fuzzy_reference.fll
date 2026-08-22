@@ -1,17 +1,8 @@
-Engine: HySecTwinSecurityRisk
-  description: Reference fuzzy configuration for reproducible HySecTwin uncertainty-aware reasoning
+Engine: HySecTwinSmartLightingSecurityRisk
+  description: Reference fuzzy configuration aligned with the HySecTwin smart-lighting CPS
 
-InputVariable: networkTrafficRate
-  description: Normalized network-traffic anomaly intensity, 0=baseline and 1=strong deviation
-  enabled: true
-  range: 0.000 1.000
-  lock-range: true
-  terms: Low Triangle 0.000 0.000 0.500
-         Medium Triangle 0.250 0.500 0.750
-         High Triangle 0.500 1.000 1.000
-
-InputVariable: firmwareIntegrityRisk
-  description: Normalized firmware-integrity risk, 0=verified and 1=unknown/unverified/compromised
+InputVariable: stateMismatch
+  description: Normalized mismatch between expected/physical context and reported light or DT state
   enabled: true
   range: 0.000 1.000
   lock-range: true
@@ -20,7 +11,16 @@ InputVariable: firmwareIntegrityRisk
          High Triangle 0.500 1.000 1.000
 
 InputVariable: commandAnomaly
-  description: Normalized command/control anomaly intensity
+  description: Normalized deviation of switch/control commands from expected or authorised behaviour
+  enabled: true
+  range: 0.000 1.000
+  lock-range: true
+  terms: Low Triangle 0.000 0.000 0.500
+         Medium Triangle 0.250 0.500 0.750
+         High Triangle 0.500 1.000 1.000
+
+InputVariable: sensorContextAnomaly
+  description: Normalized inconsistency between illumination/sensor context and reported or commanded device state
   enabled: true
   range: 0.000 1.000
   lock-range: true
@@ -41,16 +41,17 @@ OutputVariable: securityRisk
          Medium Triangle 0.250 0.500 0.750
          High Triangle 0.500 1.000 1.000
 
-RuleBlock: HySecTwinRules
-  description: Compact reference rule base; deterministic rules remain in BenchMark/durable_rules_script.py
+RuleBlock: HySecTwinSmartLightingRules
+  description: Compact reference rules for light-state, command, sensor-context, and PT-DT inconsistencies
   enabled: true
   conjunction: Minimum
   disjunction: Maximum
   implication: Minimum
   activation: General
-  rule: if networkTrafficRate is Low and firmwareIntegrityRisk is Low and commandAnomaly is Low then securityRisk is Low
-  rule: if networkTrafficRate is Medium or firmwareIntegrityRisk is Medium or commandAnomaly is Medium then securityRisk is Medium
-  rule: if networkTrafficRate is High then securityRisk is High
-  rule: if firmwareIntegrityRisk is High then securityRisk is High
+  rule: if stateMismatch is Low and commandAnomaly is Low and sensorContextAnomaly is Low then securityRisk is Low
+  rule: if stateMismatch is Medium or commandAnomaly is Medium or sensorContextAnomaly is Medium then securityRisk is Medium
+  rule: if stateMismatch is High then securityRisk is High
   rule: if commandAnomaly is High then securityRisk is High
-  rule: if firmwareIntegrityRisk is Medium and commandAnomaly is Medium then securityRisk is High
+  rule: if sensorContextAnomaly is High then securityRisk is High
+  rule: if stateMismatch is Medium and sensorContextAnomaly is Medium then securityRisk is High
+  rule: if commandAnomaly is Medium and stateMismatch is Medium then securityRisk is High
