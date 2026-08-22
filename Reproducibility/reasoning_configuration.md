@@ -2,47 +2,45 @@
 
 ## Purpose
 
-This document makes the reference reasoning parameters explicit so that the uncertainty-aware component can be independently inspected and reproduced. It separates three quantities that should not be conflated:
+This document makes the reference reasoning configuration explicit for inspection and reproduction. The examples are aligned with the smart-lighting CPS used in the article: Zigbee-connected lights, switches/controllers, illumination/temperature/humidity sensors, MQTT telemetry, and Eclipse Ditto twin states. It separates deterministic rule matching from fuzzy membership degrees and the final defuzzified security-risk score.
 
-1. deterministic-rule confidence attached to an exact rule match;
-2. fuzzy membership degrees used to represent gradual evidence;
-3. the final defuzzified `securityRisk` score used for decision support.
+## 1. Deterministic rule examples aligned with the testbed
 
-## 1. Deterministic rule confidence
+The article operationalises campaign-inspired behaviours as observable conditions in the smart-lighting CPS. Deterministic rules therefore operate on light/device state, control commands, configuration/state consistency, reachability, sensor observations, and PT-DT consistency rather than on PLC, HMI, RTU, or Modbus-specific variables.
 
-The executable C0012 examples in `BenchMark/durable_rules_script.py` use fixed rule confidences:
+| Testbed-observable rule condition | Article mapping | Deterministic outcome |
+|---|---|---|
+| Remote/unexpected control of a light without an authorised control context | C0012 / unauthorized remote control | Security alert |
+| Command changes a light state outside the expected control sequence | C0012 / malicious or unexpected command execution | Security alert |
+| Reported light state is inconsistent with its expected/configured state | C0012 / configuration or state tampering | Security alert |
+| Light reports OFF while illumination/context indicates an active-light condition | C0025 / logical-physical state mismatch | Security alert |
+| Digital twin reports light ON while the corresponding physical observation indicates OFF | C0025 / DT state spoofing / PT-DT inconsistency | Security alert |
 
-| Rule condition | ATT&CK ICS technique | Confidence |
-|---|---:|---:|
-| HMI unauthorized access | T0801 | 0.95 |
-| PLC firmware version unknown | T0827 | 0.90 |
-| Suspicious MODBUS function code | T0850 | 0.88 |
-| Irregular sensor reporting frequency | T0860 | 0.85 |
-| RTU configuration overwritten | T0846 | 0.90 |
+These rules are binary condition-to-alert mappings. No universal deterministic confidence value is assigned here. This avoids treating confidence values from legacy benchmark examples as if they were calibrated probabilities for the smart-lighting testbed.
 
-These values are deterministic alert confidences. They are not fuzzy membership degrees.
+The older `BenchMark/durable_rules_script.py` contains generic CPS/ICS examples (HMI, PLC, Modbus, RTU). Those examples are retained as legacy benchmark artefacts but are **not** the component model of the smart-lighting physical twin described in the article.
 
-## 2. Normalized fuzzy inputs
+## 2. Normalized fuzzy inputs aligned with the smart-lighting CPS
 
-The reference fuzzy model uses three normalized inputs in `[0,1]`:
+The reference fuzzy model uses three normalized inputs in `[0,1]` that can be derived from the semantic fact base:
 
-- `networkTrafficRate`: deviation from the asset's baseline network-traffic profile;
-- `firmwareIntegrityRisk`: uncertainty/risk associated with firmware integrity;
-- `commandAnomaly`: deviation of control commands from the expected/authorized pattern.
+- `stateMismatch`: degree of disagreement between expected/physical context and the reported light or DT state;
+- `commandAnomaly`: degree to which a switch/control command deviates from the expected or authorised control pattern;
+- `sensorContextAnomaly`: degree to which illumination and related sensor context are inconsistent with the reported/commanded device state.
 
 For a numeric observation `x`, a baseline center `m`, and an allowed baseline deviation `d > 0`, the reference normalization is:
 
 `anomaly(x) = min(1, abs(x-m) / d)`.
 
-This deliberately normalizes heterogeneous telemetry before fuzzy inference. Deployments should estimate `m` and `d` from their own benign baseline rather than treating an absolute packet-rate value as universal across CPS assets.
-
 For categorical evidence, the reference mapping is:
 
-| Semantic state | Normalized risk |
+| Semantic state | Normalized anomaly |
 |---|---:|
-| verified / authorized / expected | 0.00 |
-| uncertain / partially verified / unusual | 0.50 |
-| unknown / unverified / unauthorized / suspicious | 1.00 |
+| consistent / authorised / expected | 0.00 |
+| uncertain / partially consistent / unusual | 0.50 |
+| inconsistent / unauthorised / suspicious | 1.00 |
+
+This mapping is intentionally asset-relative. Raw illumination, temperature, humidity, or message-rate values should be interpreted against the corresponding device/context baseline rather than treated as universal CPS thresholds.
 
 ## 3. Membership functions
 
@@ -52,9 +50,9 @@ All three inputs use the same transparent triangular partition:
 - Medium: `Triangle(0.25, 0.50, 0.75)`
 - High: `Triangle(0.50, 1.00, 1.00)`
 
-The output `securityRisk` uses the same Low/Medium/High partition. The complete machine-readable configuration is in `hysectwin_fuzzy_reference.fll`.
+The output `securityRisk` uses the same Low/Medium/High partition. The complete machine-readable reference configuration is in `hysectwin_fuzzy_reference.fll`.
 
-The overlapping triangles were selected as a parsimonious reference partition: adjacent linguistic states overlap, boundary observations can belong partially to two states, and no discontinuous decision is introduced before defuzzification.
+The overlapping triangles provide a parsimonious representation of gradual evidence: adjacent linguistic states overlap and boundary observations can belong partially to two states before defuzzification.
 
 ## 4. Inference and defuzzification
 
@@ -66,11 +64,11 @@ The reference FuzzyLite model uses:
 - aggregation: Maximum;
 - defuzzification: Centroid (100 divisions).
 
-This is a Mamdani-style reference configuration chosen for transparency and ease of reproduction rather than dataset-specific optimization.
+This is a Mamdani-style reference configuration chosen for transparency and reproducibility rather than dataset-specific optimisation.
 
 ## 5. Decision threshold and confidence bands
 
-The defuzzified output is in `[0,1]`. The reference security decision threshold is:
+The defuzzified output is in `[0,1]`. The documented reference operating threshold is:
 
 `theta = 0.65`.
 
@@ -80,21 +78,30 @@ Interpretation:
 - `0.35 <= securityRisk < 0.65`: medium / review;
 - `securityRisk >= 0.65`: high / alert.
 
-The threshold is intentionally documented as a fixed reference operating point. It is not claimed to be a universally optimal threshold or to have been statistically learned from the historical benchmark CSV files.
+These values document a reproducible reference configuration. They are not claimed to be universally optimal or statistically learned from the historical benchmark CSV files.
 
 ## 6. Calibration procedure
 
-For reproducible deployment calibration:
+For deployment-specific calibration:
 
-1. collect a benign baseline for each numeric telemetry variable;
-2. estimate the baseline center `m` and an operationally acceptable deviation `d` for that asset/context;
-3. transform raw telemetry to `[0,1]` using the normalization above;
-4. apply the fixed membership functions and fuzzy rule base;
-5. evaluate the resulting score distribution against labelled benign and attack/review scenarios;
-6. retain `theta=0.65` as the reference value or report any deployment-specific threshold separately, together with the validation data and resulting false-positive/false-negative trade-off.
+1. collect nominal smart-lighting observations for relevant device states, commands, and sensor context;
+2. establish expected PT-DT state relationships and authorised control patterns;
+3. estimate baseline centers and acceptable deviations for numeric sensor/context variables;
+4. transform observed deviations to `[0,1]` using the normalization above;
+5. apply the fixed membership functions and fuzzy rule base;
+6. validate the score distribution using nominal, malicious, and ambiguous scenarios;
+7. retain `theta=0.65` as the documented reference value or report any deployment-specific threshold separately with its validation evidence.
 
-This separation avoids presenting asset-specific raw thresholds as universal CPS constants.
+This keeps calibration tied to observable behaviour of the implemented testbed and avoids introducing PLC/HMI/RTU-specific assumptions that are absent from the physical twin.
 
-## 7. Relationship to historical experiments
+## 7. Reasoning pipeline
 
-The repository's historical `DT-Dataset-Analysis/` CSV files and existing benchmark scripts are not modified by this reproducibility package. The reference fuzzy configuration makes the paper's uncertainty-aware reasoning method explicit for inspection and future reruns; it should not be interpreted as a retroactive claim that every historical CSV was generated with this newly documented reference file.
+The reproducible reasoning flow is:
+
+`smart-lighting PT observation -> MQTT/DT state -> SAREF-aligned RDF assertions -> normalized fact base -> deterministic rule matching + fuzzy inference -> securityRisk/confidence -> explainable security alert`
+
+Representative facts include light ON/OFF state, brightness, reachability, switch/control actions, illumination context, sensor observations, and PT-DT state consistency.
+
+## 8. Relationship to historical experiments
+
+The repository's historical `DT-Dataset-Analysis/` CSV files and legacy benchmark scripts are preserved unchanged. This reproducibility package documents a testbed-aligned reference reasoning configuration for inspection and future reruns; it does not retroactively claim that every historical CSV was generated with this newly documented reference configuration.
