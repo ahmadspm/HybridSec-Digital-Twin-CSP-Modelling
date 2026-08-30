@@ -1,0 +1,7 @@
+condition,n,det_alert_retention_pct,hybrid_alert_retention_pct,mean_hybrid_risk,evidence_completeness_pct,injected_delay_ms,chronological_final_state_pct
+baseline,200,100.0,100.0,0.834,100.0,0.0,100.0
+noisy,200,100.0,100.0,0.778,100.0,0.0,100.0
+missing,200,91.0,100.0,0.731,70.5,0.0,100.0
+delayed,200,100.0,100.0,0.834,100.0,100.0,100.0
+spoofed,200,100.0,100.0,0.834,100.0,0.0,100.0
+out_of_order,200,100.0,100.0,0.834,100.0,0.0,0.0
